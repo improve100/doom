@@ -1,0 +1,2 @@
+# doom
+doom personal configure
