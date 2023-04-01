@@ -125,17 +125,67 @@
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;; (add-hook 'window-setup-hook #'toggle-frame-maximized)
 ;; (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
+(add-to-list 'auto-mode-alist '("\\.launch\\'" . nxml-mode))
+(add-to-list 'auto-mode-alist '("\\.ino\\'" . c++-mode))
+
 (setq fancy-splash-image '"~/Pictures/dolphin.png")
 ;; custommize function
 (defun mynotes ()
     (interactive)
 (dired "~/SparkleShare/mynotes"))
 
+(defun devdocs-search ()
+"Search for QUERY in the DevDocs website."
+(interactive)
+(let ((devdocs-site-url "https://devdocs.io")
+        (query (if (use-region-p)
+                (buffer-substring (region-beginning) (region-end))
+                (thing-at-point 'symbol))))
+(message "" devdocs-site-url)
+(browse-url (format "%s/#q=%s" devdocs-site-url (url-hexify-string query)))))
+
+
 ;; (map! :leader
 ;;     (:prefix ("o" . "open in browser")
 ;;       :desc "Open mynotes"  "n"  #'mynotes))
 (map! :leader
       :desc "Open mynotes"
-      "n p" #'mynotes)
-;; (global-set-key (kbd "SPC o n") #'mynotes)
+      "o n" #'mynotes)
+(map! :leader
+      :desc "Lookup Dictionary"
+      "o y" #'youdao-dictionary-search-at-point-posframe)
+(map! :leader
+      :desc "Lookup Devdocs"
+      "o h" #'devdocs-search)
+
+;; (global-set-key (kbd "C-x C-;") #'comment-line)
 ;; (define-key global-map (kbd "SPC o n") #'mynotes)
+(use-package sis
+  ;; :hook
+  ;; enable the /context/ and /inline region/ mode for specific buffers
+  ;; (((text-mode prog-mode) . sis-context-mode)
+  ;;  ((text-mode prog-mode) . sis-inline-mode))
+
+  :config
+  ;; For MacOS
+  ;; (sis-ism-lazyman-config
+
+  ;;  ;; English input source may be: "ABC", "US" or another one.
+  ;;  ;; "com.apple.keylayout.ABC"
+  ;;  "com.apple.keylayout.US"
+
+  ;;  ;; Other language input source: "rime", "sogou" or another one.
+  ;;  ;; "im.rime.inputmethod.Squirrel.Rime"
+  ;;  "com.sogou.inputmethod.sogou.pinyin")
+  (sis-ism-lazyman-config "1" "2" 'fcitx)
+
+  ;; enable the /cursor color/ mode
+  (sis-global-cursor-color-mode t)
+  ;; enable the /respect/ mode
+  (sis-global-respect-mode t)
+  ;; enable the /context/ mode for all buffers
+  (sis-global-context-mode t)
+  ;; enable the /inline english/ mode for all buffers
+  (sis-global-inline-mode t)
+  )
+
