@@ -128,7 +128,9 @@
 (add-to-list 'auto-mode-alist '("\\.launch\\'" . nxml-mode))
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c++-mode))
 
-(setq fancy-splash-image '"~/Pictures/dolphin.png")
+(if (string= (system-name) "mingjiao")
+  (setq fancy-splash-image '"~/Pictures/logo.png")
+(setq fancy-splash-image '"~/Pictures/dolphin.png"))
 ;; custommize function
 (defun mynotes ()
     (interactive)
