@@ -146,6 +146,22 @@
 (message "" devdocs-site-url)
 (browse-url (format "%s/#q=%s" devdocs-site-url (url-hexify-string query)))))
 
+(setq consult-preview-key "TAB")
+
+(defun org-notes-search (&optional arg)
+  "Conduct a text search in the current project root.
+If prefix ARG is set, include ignored/hidden files."
+  ;; (interactive "P")
+  (interactive)
+  (let* (
+         ;; (projectile-project-root nil)
+         ;; (disabled-command-function nil)
+         (default-directory "~/SparkleShare/mynotes/"))
+    (call-interactively
+     (cond ((modulep! :completion ivy)     #'+ivy/project-search)
+           ((modulep! :completion helm)    #'+helm/project-search)
+           ((modulep! :completion vertico) #'+vertico/project-search)
+           (#'projectile-ripgrep)))))
 
 ;; (map! :leader
 ;;     (:prefix ("o" . "open in browser")
@@ -159,35 +175,37 @@
 (map! :leader
       :desc "Lookup Devdocs"
       "o h" #'devdocs-search)
+(map! :leader
+      :desc "Lookup Mynotes"
+      "o s" #'org-notes-search)
 
 ;; (global-set-key (kbd "C-x C-;") #'comment-line)
 ;; (define-key global-map (kbd "SPC o n") #'mynotes)
-(use-package sis
-  ;; :hook
-  ;; enable the /context/ and /inline region/ mode for specific buffers
-  ;; (((text-mode prog-mode) . sis-context-mode)
-  ;;  ((text-mode prog-mode) . sis-inline-mode))
+;; (use-package sis
+;;   ;; :hook
+;;   ;; enable the /context/ and /inline region/ mode for specific buffers
+;;   ;; (((text-mode prog-mode) . sis-context-mode)
+;;   ;;  ((text-mode prog-mode) . sis-inline-mode))
 
-  :config
-  ;; For MacOS
-  ;; (sis-ism-lazyman-config
+;;   :config
+;;   ;; For MacOS
+;;   ;; (sis-ism-lazyman-config
 
-  ;;  ;; English input source may be: "ABC", "US" or another one.
-  ;;  ;; "com.apple.keylayout.ABC"
-  ;;  "com.apple.keylayout.US"
+;;   ;;  ;; English input source may be: "ABC", "US" or another one.
+;;   ;;  ;; "com.apple.keylayout.ABC"
+;;   ;;  "com.apple.keylayout.US"
 
-  ;;  ;; Other language input source: "rime", "sogou" or another one.
-  ;;  ;; "im.rime.inputmethod.Squirrel.Rime"
-  ;;  "com.sogou.inputmethod.sogou.pinyin")
-  (sis-ism-lazyman-config "1" "2" 'fcitx)
+;;   ;;  ;; Other language input source: "rime", "sogou" or another one.
+;;   ;;  ;; "im.rime.inputmethod.Squirrel.Rime"
+;;   ;;  "com.sogou.inputmethod.sogou.pinyin")
+;;   (sis-ism-lazyman-config "1" "2" 'fcitx)
 
-  ;; enable the /cursor color/ mode
-  (sis-global-cursor-color-mode t)
-  ;; enable the /respect/ mode
-  (sis-global-respect-mode t)
-  ;; enable the /context/ mode for all buffers
-  (sis-global-context-mode t)
-  ;; enable the /inline english/ mode for all buffers
-  (sis-global-inline-mode t)
-  )
-
+;;   ;; enable the /cursor color/ mode
+;;   (sis-global-cursor-color-mode t)
+;;   ;; enable the /respect/ mode
+;;   (sis-global-respect-mode t)
+;;   ;; enable the /context/ mode for all buffers
+;;   (sis-global-context-mode t)
+;;   ;; enable the /inline english/ mode for all buffers
+;;   (sis-global-inline-mode t)
+;;   )
