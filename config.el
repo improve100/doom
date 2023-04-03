@@ -146,7 +146,7 @@
 (message "" devdocs-site-url)
 (browse-url (format "%s/#q=%s" devdocs-site-url (url-hexify-string query)))))
 
-(setq consult-preview-key "TAB")
+(setq consult-preview-key "C-M-SPC")
 
 (defun org-notes-search (&optional arg)
   "Conduct a text search in the current project root.
