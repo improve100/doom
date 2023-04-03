@@ -146,6 +146,9 @@
 (message "" devdocs-site-url)
 (browse-url (format "%s/#q=%s" devdocs-site-url (url-hexify-string query)))))
 
+(setq compile-command "catkin build --this -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES")
+
+
 (setq consult-preview-key "C-M-SPC")
 
 (defun org-notes-search (&optional arg)
