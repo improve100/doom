@@ -1,1 +1,1 @@
-/home/maxsense/.config/doom/init_mingjiao.el
+/home/tong/.config/doom/init_yitianjian.el

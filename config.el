@@ -120,7 +120,9 @@
 ;;
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
+;; (setq ansi-color-for-compilation-mode 'filter)
 
+(+global-word-wrap-mode +1)
 ;; set fullscren maximized
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
 ;; (add-hook 'window-setup-hook #'toggle-frame-maximized)
@@ -149,7 +151,15 @@
 (setq compile-command "catkin build --this -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES")
 
 
-(setq consult-preview-key "C-M-SPC")
+;; (setq consult-preview-key "C-M-SPC")
+;; (after! consult
+;; (consult-customize
+;; consult-theme :preview-key '(:debounce 0.2 any)
+;; consult-line :preview-key (kdb "M-."))
+;; )
+;; (when (modulep! :completion (vertico)
+;; (after! consult
+;; (consult-customize consult-theme :preview-key nil))))
 
 (after! magit
 (defun magit-push-to-gerrit ()
@@ -159,6 +169,7 @@
 (transient-append-suffix 'magit-push "p"
   '("m" "Push to gerrit" magit-push-to-gerrit)))
 
+
 (defun org-notes-search (&optional arg)
   "Conduct a text search in the current project root.
 If prefix ARG is set, include ignored/hidden files."
@@ -167,13 +178,19 @@ If prefix ARG is set, include ignored/hidden files."
   (let* (
          ;; (projectile-project-root nil)
          ;; (disabled-command-function nil)
+         (consult-preview-key "C-M-SPC")
+         (current-prefix-arg "-- -torg")
          (default-directory "~/SparkleShare/mynotes/"))
     (call-interactively
      (cond ((modulep! :completion ivy)     #'+ivy/project-search)
            ((modulep! :completion helm)    #'+helm/project-search)
            ((modulep! :completion vertico) #'+vertico/project-search)
-           (#'projectile-ripgrep)))))
-
+           ;; ((modulep! :completion vertico) #'project-search)
+           (#'projectile-ripgrep)))
+    ))
+(after! compile
+  ;; The ANSI color hook leads to errors when compiling Haskell code.
+  (remove-hook 'compilation-filter-hook #'ansi-color-compilation-filter))
 ;; (map! :leader
 ;;     (:prefix ("o" . "open in browser")
 ;;       :desc "Open mynotes"  "n"  #'mynotes))
@@ -220,3 +237,25 @@ If prefix ARG is set, include ignored/hidden files."
 ;;   ;; enable the /inline english/ mode for all buffers
 ;;   (sis-global-inline-mode t)
 ;;   )
+;; FIXME the ansi-color text issue in org-babel result block.
+;; Source: https://github.com/nnicandro/emacs-jupyter/issues/376
+;; Here is the function that jupyter-mime.el relies on,
+;; found in an older ansi-color.el in an older emacs distribution.
+(after! compile
+  (add-hook 'compilation-filter-hook
+            '(lambda () (ansi-color-apply-on-region (point-min) (point-max)))))
+;; (defun ansi-color--find-face (codes)
+;;   "Return the face corresponding to CODES."
+;;   ;; Sort the codes in ascending order to guarantee that "bold" comes before
+;;   ;; any of the colors.  This ensures that `ansi-color-bold-is-bright' is
+;;   ;; applied correctly.
+;;   (let (faces bright (codes (sort (copy-sequence codes) #'<)))
+;;     (while codes
+;;       (when-let ((face (ansi-color-get-face-1 (pop codes) bright)))
+;;         (when (and ansi-color-bold-is-bright (eq face 'ansi-color-bold))
+;;           (setq bright t))
+;;         (push face faces)))
+;;     ;; Avoid some long-lived conses in the common case.
+;;     (if (cdr faces)
+;;         (nreverse faces)
+;;       (car faces))))
