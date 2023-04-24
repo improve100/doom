@@ -152,14 +152,6 @@
 
 
 ;; (setq consult-preview-key "C-M-SPC")
-;; (after! consult
-;; (consult-customize
-;; consult-theme :preview-key '(:debounce 0.2 any)
-;; consult-line :preview-key (kdb "M-."))
-;; )
-;; (when (modulep! :completion (vertico)
-;; (after! consult
-;; (consult-customize consult-theme :preview-key nil))))
 
 (after! magit
 (defun magit-push-to-gerrit ()
@@ -178,8 +170,7 @@ If prefix ARG is set, include ignored/hidden files."
   (let* (
          ;; (projectile-project-root nil)
          ;; (disabled-command-function nil)
-         (consult-preview-key "C-M-SPC")
-         (current-prefix-arg "-- -torg")
+         (consult-preview-key "TAB")
          (default-directory "~/SparkleShare/mynotes/"))
     (call-interactively
      (cond ((modulep! :completion ivy)     #'+ivy/project-search)
@@ -207,6 +198,14 @@ If prefix ARG is set, include ignored/hidden files."
       :desc "Lookup Mynotes"
       "o s" #'org-notes-search)
 
+(use-package! sis
+  :config
+  (sis-ism-lazyman-config "1" "2" 'fcitx)
+   ;; (delete "C-h" sis-prefix-override-keys)
+  (sis-global-respect-mode t)
+  (sis-global-inline-mode t)
+  (sis-global-context-mode t)
+  (sis-global-cursor-color-mode t))
 ;; (global-set-key (kbd "C-x C-;") #'comment-line)
 ;; (define-key global-map (kbd "SPC o n") #'mynotes)
 ;; (use-package sis
@@ -259,3 +258,26 @@ If prefix ARG is set, include ignored/hidden files."
 ;;     (if (cdr faces)
 ;;         (nreverse faces)
 ;;       (car faces))))
+
+(setq python-shell-interpreter "~/.pyenv/versions/3.8.5/bin/python3.8")
+(setq mind-wave-python-command "~/.pyenv/versions/3.8.5/bin/python3.8")
+(use-package! mind-wave)
+
+(map! :leader
+      :desc "Mind Wave Chat Ask"
+      "o m a" #'mind-wave-chat-ask)
+(map! :leader
+      :desc "Mind Wave Refact Code"
+      "o m r" #'mind-wave-refactory-code)
+(map! :leader
+      :desc "Mind Wave Translate"
+      "o m t" #'mind-wave-translate-to-english)
+(map! :leader
+      :desc "Mind Wave Proof Doc"
+      "o m p" #'mind-wave-proofreading-doc)
+(map! :leader
+      :desc "Mind Wave Explain Code"
+      "o m e" #'mind-wave-explain-code)
+(map! :leader
+      :desc "Mind Wave Adjust Text"
+      "o m j" #'mind-wave-adjust-text)
