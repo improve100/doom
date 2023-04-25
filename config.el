@@ -1,1 +1,0 @@
-/home/tong/.config/doom/config_yitianjian.el
