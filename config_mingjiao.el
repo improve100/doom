@@ -51,34 +51,34 @@
 (setq org-bullets-bullet-list '("🚀" "🚄" "🚉" "⛵" "🚌" "🚔" "🚲"))
 (setq org-default-notes-file (expand-file-name "task.org" org-directory))
 (setq org-capture-templates
-        '(("W" "work" entry (file+headline "task.org" "工作安排")
+        '(("w" "work" entry (file+headline "task.org" "工作安排")
         "* TODO [#A] %? \t:work:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("w" "work by link" entry (file+headline "task.org" "工作安排")
+        ("W" "work by link" entry (file+headline "task.org" "工作安排")
         "* TODO [#A] %?%a \t:work:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("T" "tools" entry (file+headline "task.org" "tools")
+        ("t" "tools" entry (file+headline "task.org" "tools")
         "* TODO [#B] %? \t:tools:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("t" "tools by link" entry (file+headline "task.org" "tools")
+        ("T" "tools by link" entry (file+headline "task.org" "tools")
         "* TODO [#A] %?%a \t:tools:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("L" "learning" entry (file+headline "task.org" "learning")
+        ("l" "learning" entry (file+headline "task.org" "learning")
         "* TODO [#B] %? \t:learning:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("l" "learning by link" entry (file+headline "task.org" "learning")
+        ("L" "learning by link" entry (file+headline "task.org" "learning")
         "* TODO [#A] %?%a \t:learning:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("Z" "threemen" entry (file+headline "task.org" "threemen")
+        ("z" "threemen" entry (file+headline "task.org" "threemen")
         "* TODO [#B] %? \t:threemen:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("z" "threemen by link" entry (file+headline "task.org" "threemen")
+        ("Z" "threemen by link" entry (file+headline "task.org" "threemen")
         "* TODO [#A] %?%a \t:threemen:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("O" "others" entry (file+headline "task.org" "others")
+        ("o" "others" entry (file+headline "task.org" "others")
         "* TODO [#C] %? \t:other:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("o" "others by link" entry (file+headline "task.org" "others")
+        ("O" "others by link" entry (file+headline "task.org" "others")
         "* TODO [#A] %?%a \t:others:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
         ("e" "email" entry (file+headline "task.org" "email")
@@ -125,6 +125,7 @@
 (+global-word-wrap-mode +1)
 ;; set fullscren maximized
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(setq create-lockfiles nil)
 ;; (add-hook 'window-setup-hook #'toggle-frame-maximized)
 ;; (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
 (add-to-list 'auto-mode-alist '("\\.launch\\'" . nxml-mode))
@@ -262,7 +263,8 @@ If prefix ARG is set, include ignored/hidden files."
 (setq python-shell-interpreter "~/.pyenv/versions/3.8.5/bin/python3.8")
 (setq mind-wave-python-command "~/.pyenv/versions/3.8.5/bin/python3.8")
 (use-package! mind-wave)
-
+(setq auth-sources '("~/.authinfo"))
+(setq forge-owned-accounts '(("improve100" . (remote-name "improve100"))))
 (map! :leader
       :desc "Mind Wave Chat Ask"
       "o m a" #'mind-wave-chat-ask)
@@ -281,3 +283,8 @@ If prefix ARG is set, include ignored/hidden files."
 (map! :leader
       :desc "Mind Wave Adjust Text"
       "o m j" #'mind-wave-adjust-text)
+(map! :leader
+      :desc "Mind Wave Generate Code"
+      "o m c" #'mind-wave-generate-code)
+
+(setq flycheck-shellcheck-follow-sources nil)

@@ -53,3 +53,7 @@
 ;(unpin! pinned-package another-pinned-package)
 ;; ...Or *all* packages (NOT RECOMMENDED; will likely break things)
 ;(unpin! t)
+
+; add to .doom.d/packages.el
+(package! closql :pin "0a7226331ff1f96142199915c0ac7940bac4afdd")
+(package! eglot :pin "419a8cb11a6f25c706e37b8eb7e16d1d3cb1c91d")
