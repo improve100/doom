@@ -121,7 +121,6 @@
 ;; You can also try 'gd' (or 'C-c c d') to jump to their definition and see how
 ;; they are implemented.
 ;; (setq ansi-color-for-compilation-mode 'filter)
-(setq auth-sources '("~/.authinfo"))
 (+global-word-wrap-mode +1)
 ;; set fullscren maximized
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
@@ -275,4 +274,43 @@ If prefix ARG is set, include ignored/hidden files."
   (sis-global-context-mode t)
   (sis-global-cursor-color-mode t))
 
+;; (setq python-shell-interpreter "~/.pyenv/versions/3.10.8/bin/python3")
+;; (use-package! lsp-bridge
+;;   :config
+;;   (map! :map acm-mode-map
+;;         [tab]           #'acm-select-next
+;;         [backtab]       #'acm-select-prev)
+;;   (map! :map doom-leader-code-map
+;;         :desc "LSP Rename"
+;;         "r"             #'lsp-bridge-rename
+;;         :desc "LSP Find declaration"
+;;         "j"             #'lsp-bridge-find-def)
+;;   ;; (setq lsp-bridge-c-lsp-server "ccls")
+;;   (require 'yasnippet)
+;;   (yas-global-mode 1)
+;;   (global-lsp-bridge-mode))
+
 (use-package! mind-wave)
+(setq auth-sources '("~/.authinfo"))
+(setq forge-owned-accounts '(("improve100" . (remote-name "improve100"))))
+(map! :leader
+      :desc "Mind Wave Chat Ask"
+      "o m a" #'mind-wave-chat-ask)
+(map! :leader
+      :desc "Mind Wave Refact Code"
+      "o m r" #'mind-wave-refactory-code)
+(map! :leader
+      :desc "Mind Wave Translate"
+      "o m t" #'mind-wave-translate-to-english)
+(map! :leader
+      :desc "Mind Wave Proof Doc"
+      "o m p" #'mind-wave-proofreading-doc)
+(map! :leader
+      :desc "Mind Wave Explain Code"
+      "o m e" #'mind-wave-explain-code)
+(map! :leader
+      :desc "Mind Wave Adjust Text"
+      "o m j" #'mind-wave-adjust-text)
+(map! :leader
+      :desc "Mind Wave Generate Code"
+      "o m c" #'mind-wave-generate-code)
