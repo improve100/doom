@@ -45,6 +45,24 @@
 (setq org-directory "~/SparkleShare/mynotes/GTD/")
 ;; (setq org-noter-notes-search-path '("~/SparkleShare/mynotes"))
 ;; (setq org-agenda-files (list (concat org-directory "task.org")))
+;; (setq org-agenda-prefix-format '((agenda . " %i %-12:c%?-12t%s %b ")
+;;                                 (timeline . "  % s")
+;;                                 (todo . " %i %-12:c%l")
+;;                                 (tags . " %i %-12:c")
+;;                                 (search . " %i %-12:c")))
+
+(defun my/org-agenda-prefix-format (prefix)
+  (let ((scheduled (org-entry-get nil "SCHEDULED"))
+        (closed (org-entry-get nil "CLOSED")))
+    (or (and scheduled closed (concat prefix "Scheduled: " scheduled " Closed: " closed))
+        (and scheduled (concat prefix "Scheduled: " scheduled))
+        (and closed (concat prefix "Closed: " closed))
+        prefix)))
+(setq org-agenda-prefix-format '((agenda . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
+                                (todo . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
+                                (tags . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
+                                (search . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")))
+
 (setq org-agenda-files '("~/SparkleShare/mynotes/GTD/"))
 (setq org-src-fontify-natively t)
 (setq org-todo-keywords '((sequence "TODO(t)" "DOING(i)" "|" "DONE(d)" "ABORT(a)")))
@@ -52,31 +70,31 @@
 (setq org-default-notes-file (expand-file-name "task.org" org-directory))
 (setq org-capture-templates
         '(("w" "work" entry (file+headline "task.org" "工作安排")
-        "* TODO [#A] %? \t:work:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+        "* TODO [#A] %? \t:work:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
         :empty-lines 1)
         ("W" "work by link" entry (file+headline "task.org" "工作安排")
         "* TODO [#A] %?%a \t:work:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
         ("t" "tools" entry (file+headline "task.org" "tools")
-        "* TODO [#B] %? \t:tools:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+        "* TODO [#B] %? \t:tools:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
         :empty-lines 1)
         ("T" "tools by link" entry (file+headline "task.org" "tools")
         "* TODO [#A] %?%a \t:tools:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
         ("l" "learning" entry (file+headline "task.org" "learning")
-        "* TODO [#B] %? \t:learning:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+        "* TODO [#B] %? \t:learning:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
         :empty-lines 1)
         ("L" "learning by link" entry (file+headline "task.org" "learning")
         "* TODO [#A] %?%a \t:learning:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
         ("z" "threemen" entry (file+headline "task.org" "threemen")
-        "* TODO [#B] %? \t:threemen:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+        "* TODO [#B] %? \t:threemen:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
         :empty-lines 1)
         ("Z" "threemen by link" entry (file+headline "task.org" "threemen")
         "* TODO [#A] %?%a \t:threemen:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
         ("o" "others" entry (file+headline "task.org" "others")
-        "* TODO [#C] %? \t:other:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+        "* TODO [#C] %? \t:other:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
         :empty-lines 1)
         ("O" "others by link" entry (file+headline "task.org" "others")
         "* TODO [#A] %?%a \t:others:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
