@@ -42,7 +42,7 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (after! org
-(setq org-directory "~/SparkleShare/mynotes/GTD/")
+(setq org-directory "~/SparkleShare/mynotes/")
 ;; (setq org-noter-notes-search-path '("~/SparkleShare/mynotes"))
 ;; (setq org-agenda-files (list (concat org-directory "task.org")))
 ;; (setq org-agenda-prefix-format '((agenda . " %i %-12:c%?-12t%s %b ")
@@ -51,58 +51,135 @@
 ;;                                 (tags . " %i %-12:c")
 ;;                                 (search . " %i %-12:c")))
 
+;; (defun my/org-agenda-prefix-format (prefix)
+;;   (let ((scheduled (org-entry-get nil "SCHEDULED"))
+;;         (closed (org-entry-get nil "CLOSED")))
+;;     (or (and scheduled closed (concat prefix "Scheduled: " scheduled " Closed: " closed))
+;;         (and scheduled (concat prefix "Scheduled: " scheduled))
+;;         (and closed (concat prefix "Closed: " closed))
+;;         prefix)))
+
 (defun my/org-agenda-prefix-format (prefix)
   (let ((scheduled (org-entry-get nil "SCHEDULED"))
+        (deadline (org-entry-get nil "DEADLINE"))
         (closed (org-entry-get nil "CLOSED")))
-    (or (and scheduled closed (concat prefix "Scheduled: " scheduled " Closed: " closed))
-        (and scheduled (concat prefix "Scheduled: " scheduled))
-        (and closed (concat prefix "Closed: " closed))
-        prefix)))
+    (concat
+     prefix
+     (when scheduled
+       (concat "Scheduled: " scheduled " "))
+     (when deadline
+       (concat "Deadline: " deadline " "))
+     (when closed
+       (concat "Closed: " closed)))))
+
 (setq org-agenda-prefix-format '((agenda . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
                                 (todo . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
                                 (tags . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
                                 (search . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")))
 
+;; (setq org-agenda-custom-commands
+;;       '(("R" "Search Agenda for Keywords"
+;;         (let ((regexp "\\(-[0-9]+\\)d"))
+;;                 ((search "-3d"))  ; 空的搜索规则，保留原有的规则
+;;         (cond
+;;         ((string-match regexp search)
+;;                 (list (list 'agenda ""
+;;                             (list 'org-agenda-span 1)
+;;                             (list 'org-agenda-start-day search)
+;;                             (list 'org-agenda-end-day search))))
+;;         (t ; Default keyword search
+;;                 (list (list 'search search))))))))
+;; (setq org-agenda-custom-commands
+;;       '(("G" "Search Agenda for Keywords"
+;;          ((agenda "")
+;;           (org-agenda-search-view-always-boolean t)
+;;           (org-agenda-search-exclude nil)
+;;           (org-agenda-tag-filter-preset '("-3d"))
+;;           (org-agenda-archives-mode nil))
+;;          nil)))
+
+;; (setq org-agenda-custom-commands
+;;       '(("s" "Search for keywords" search
+;;           (lambda (search)
+;;            (message "hello")
+;;             (let ((regexp "\\(-[0-9]+\\)d"))
+;;               (cond
+;;                ((string-match regexp search)
+;;                 (list (list 'agenda ""
+;;                             (list 'org-agenda-span 1)
+;;                             (list 'org-agenda-start-day search)
+;;                             (list 'org-agenda-end-day search))))
+;;                (t ; Default keyword search
+;;                 (list (list 'search search)))))))))
+
+;; (setq org-agenda-custom-commands
+;;       '(("s" "Search for keywords" search
+;;          (lambda () (interactive)
+;;            (message "hello")
+;;            (let ((search (org-read-string "Search: ")))
+;;              (org-agenda nil search))))))
+
+
+;; (defun my-org-agenda-search-custom ()
+;;   (interactive)
+;;   (let ((search (org-read-string "Search: ")))
+;;     (let ((regexp "\\(-[0-9]+\\)d"))
+;;       (message "hello")
+;;       (if (string-match regexp search)
+;;           (let* ((days-ago (- (string-to-number (match-string 1 search))))
+;;                  (start-day (format-time-string "%Y-%m-%d"
+;;                                                 (time-subtract (current-time)
+;;                                                                (days-to-time days-ago)))))
+;;             (org-agenda nil (format "s/%s" start-day)))
+;;         (org-agenda-search search)))))
+
+;; (setq org-agenda-custom-commands
+;;       '(("s" "Search for keywords" search
+;;          (lambda () (interactive) (my-org-agenda-search-custom)))))
+
+
+
+;; (setq org-directory "~/SparkleShare/mynotes/")
 (setq org-agenda-files '("~/SparkleShare/mynotes/GTD/"))
 (setq org-src-fontify-natively t)
 (setq org-todo-keywords '((sequence "TODO(t)" "DOING(i)" "|" "DONE(d)" "ABORT(a)")))
 (setq org-bullets-bullet-list '("🚀" "🚄" "🚉" "⛵" "🚌" "🚔" "🚲"))
-(setq org-default-notes-file (expand-file-name "task.org" org-directory))
+(setq org-default-notes-file (expand-file-name "GTD/task.org" org-directory))
 (setq org-capture-templates
-        '(("w" "work" entry (file+headline "task.org" "工作安排")
-        "* TODO [#A] %? \t:work:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
+        '(("w" "work" entry (file+headline "GTD/task.org" "工作安排")
+        "* TODO [#A] %? \t:work:\nSCHEDULED: <%<%Y-%m-%d %a %H:%M>> \n"
         :empty-lines 1)
-        ("W" "work by link" entry (file+headline "task.org" "工作安排")
+        ("W" "work by link" entry (file+headline "GTD/task.org" "工作安排")
         "* TODO [#A] %?%a \t:work:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("t" "tools" entry (file+headline "task.org" "tools")
-        "* TODO [#B] %? \t:tools:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
+        ("t" "tools" entry (file+headline "GTD/task.org" "tools")
+        "* TODO [#B] %? \t:tools:\nSCHEDULED: <%<%Y-%m-%d %a %H:%M>> \n"
         :empty-lines 1)
-        ("T" "tools by link" entry (file+headline "task.org" "tools")
+        ("T" "tools by link" entry (file+headline "GTD/task.org" "tools")
         "* TODO [#A] %?%a \t:tools:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("l" "learning" entry (file+headline "task.org" "learning")
-        "* TODO [#B] %? \t:learning:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
+        ("l" "learning" entry (file+headline "GTD/task.org" "learning")
+        "* TODO [#B] %? \t:learning:\nSCHEDULED: <%<%Y-%m-%d %a %H:%M>> \n"
         :empty-lines 1)
         ("L" "learning by link" entry (file+headline "task.org" "learning")
         "* TODO [#A] %?%a \t:learning:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("z" "threemen" entry (file+headline "task.org" "threemen")
-        "* TODO [#B] %? \t:threemen:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
+        ("z" "threemen" entry (file+headline "GTD/task.org" "threemen")
+        "* TODO [#B] %? \t:threemen:\nSCHEDULED: <%<%Y-%m-%d %a %H:%M>> \n"
         :empty-lines 1)
-        ("Z" "threemen by link" entry (file+headline "task.org" "threemen")
+        ("Z" "threemen by link" entry (file+headline "GTD/task.org" "threemen")
         "* TODO [#A] %?%a \t:threemen:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("o" "others" entry (file+headline "task.org" "others")
-        "* TODO [#C] %? \t:other:\nSCHEDULED: [%<%Y-%m-%d %a %H:%M>] \n"
+        ("o" "others" entry (file+headline "GTD/task.org" "others")
+        "* TODO [#C] %? \t:other:\nSCHEDULED: <%<%Y-%m-%d %a %H:%M>> \n"
         :empty-lines 1)
-        ("O" "others by link" entry (file+headline "task.org" "others")
+        ("O" "others by link" entry (file+headline "GTD/task.org" "others")
         "* TODO [#A] %?%a \t:others:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("e" "email" entry (file+headline "task.org" "email")
+        ("e" "email" entry (file+headline "GTD/task.org" "email")
         "* TODO [#A] %?%a \t:email:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("f" "fix" entry (file+headline "task.org" "fix")
+        ("f" "fix" entry (file+headline "GTD/task.org" "fix")
         "* TODO [#A] %?%a \t:fix:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
         )))
