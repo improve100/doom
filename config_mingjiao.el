@@ -42,49 +42,49 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (after! org
-(setq org-directory "~/SparkleShare/mynotes/GTD/")
+(setq org-directory "~/SparkleShare/mynotes/")
 ;; (setq org-noter-notes-search-path '("~/SparkleShare/mynotes"))
 ;; (setq org-agenda-files (list (concat org-directory "task.org")))
 (setq org-agenda-files '("~/SparkleShare/mynotes/GTD/"))
 (setq org-src-fontify-natively t)
 (setq org-todo-keywords '((sequence "TODO(t)" "DOING(i)" "|" "DONE(d)" "ABORT(a)")))
 (setq org-bullets-bullet-list '("🚀" "🚄" "🚉" "⛵" "🚌" "🚔" "🚲"))
-(setq org-default-notes-file (expand-file-name "task.org" org-directory))
+(setq org-default-notes-file (expand-file-name "GTD/task.org" org-directory))
 (setq org-capture-templates
-        '(("w" "work" entry (file+headline "task.org" "工作安排")
+        '(("w" "work" entry (file+headline "GTD/task.org" "工作安排")
         "* TODO [#A] %? \t:work:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("W" "work by link" entry (file+headline "task.org" "工作安排")
+        ("W" "work by link" entry (file+headline "GTD/task.org" "工作安排")
         "* TODO [#A] %?%a \t:work:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("t" "tools" entry (file+headline "task.org" "tools")
+        ("t" "tools" entry (file+headline "GTD/task.org" "tools")
         "* TODO [#B] %? \t:tools:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("T" "tools by link" entry (file+headline "task.org" "tools")
+        ("T" "tools by link" entry (file+headline "GTD/task.org" "tools")
         "* TODO [#A] %?%a \t:tools:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("l" "learning" entry (file+headline "task.org" "learning")
+        ("l" "learning" entry (file+headline "GTD/task.org" "learning")
         "* TODO [#B] %? \t:learning:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("L" "learning by link" entry (file+headline "task.org" "learning")
+        ("L" "learning by link" entry (file+headline "GTD/task.org" "learning")
         "* TODO [#A] %?%a \t:learning:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("z" "threemen" entry (file+headline "task.org" "threemen")
+        ("z" "threemen" entry (file+headline "GTD/task.org" "threemen")
         "* TODO [#B] %? \t:threemen:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("Z" "threemen by link" entry (file+headline "task.org" "threemen")
+        ("Z" "threemen by link" entry (file+headline "GTD/task.org" "threemen")
         "* TODO [#A] %?%a \t:threemen:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("o" "others" entry (file+headline "task.org" "others")
+        ("o" "others" entry (file+headline "GTD/task.org" "others")
         "* TODO [#C] %? \t:other:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
         :empty-lines 1)
-        ("O" "others by link" entry (file+headline "task.org" "others")
+        ("O" "others by link" entry (file+headline "GTD/task.org" "others")
         "* TODO [#A] %?%a \t:others:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("e" "email" entry (file+headline "task.org" "email")
+        ("e" "email" entry (file+headline "GTD/task.org" "email")
         "* TODO [#A] %?%a \t:email:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
-        ("f" "fix" entry (file+headline "task.org" "fix")
+        ("f" "fix" entry (file+headline "GTD/task.org" "fix")
         "* TODO [#A] %?%a \t:fix:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
         )))
