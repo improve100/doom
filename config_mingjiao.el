@@ -43,8 +43,71 @@
 ;; change `org-directory'. It must be set before org loads!
 (after! org
 (setq org-directory "~/SparkleShare/mynotes/")
+
+;; (defun org-agenda-skip-scheduled-if-not-today ()
+;; "If this function returns nil, the current match should not be skipped.
+;; Otherwise, the function must return a position from where the search
+;; should be continued."
+;;  (ignore-errors
+;;   (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+;;         (scheduled-day
+;;         (time-to-days
+;;         (org-time-string-to-time
+;;         (org-entry-get nil "SCHEDULED"))))
+;;         (now (time-to-days (current-time))))
+;;    (and scheduled-day
+;;         (not (= scheduled-day now))
+;;         subtree-end))))
+
+;; (defun org-agenda-skip-scheduled-if-not-yesterday ()
+;; "If this function returns nil, the current match should not be skipped.
+;; Otherwise, the function must return a position from where the search
+;; should be continued."
+;;  (ignore-errors
+;;   (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+;;         (scheduled-day
+;;         (time-to-days
+;;         (org-time-string-to-time
+;;         (org-entry-get nil "SCHEDULED"))))
+;;         (yesterday (- (time-to-days (current-time)) 1)))
+;;    (and scheduled-day
+;;         (not (= scheduled-day yesterday))
+;;         subtree-end))))
+
+;; (defun org-agenda-skip-scheduled-if-not-last-three-days ()
+;; "If this function returns nil, the current match should not be skipped.
+;; Otherwise, the function must return a position from where the search
+;; should be continued."
+;;  (ignore-errors
+;;   (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+;;         (scheduled-day
+;;         (time-to-days
+;;         (org-time-string-to-time
+;;         (org-entry-get nil "SCHEDULED"))))
+;;         (the-day-before-yesterday (- (time-to-days (current-time)) 5)))
+;;    (and scheduled-day
+;;         (not (> scheduled-day the-day-before-yesterday))
+;;         subtree-end))))
+
 ;; (setq org-noter-notes-search-path '("~/SparkleShare/mynotes"))
 ;; (setq org-agenda-files (list (concat org-directory "task.org")))
+(defun my/org-agenda-prefix-format (prefix)
+  (let ((scheduled (org-entry-get nil "SCHEDULED"))
+        (closed (org-entry-get nil "CLOSED")))
+    (or (and scheduled closed (concat prefix "Scheduled: " scheduled " Closed: " closed))
+        (and scheduled (concat prefix "Scheduled: " scheduled))
+        (and closed (concat prefix "Closed: " closed))
+        prefix)))
+(setq org-agenda-prefix-format '((agenda . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
+                                (todo . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
+                                (tags . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
+                                (search . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")))
+
+(add-hook 'org-agenda-mode-hook
+        (lambda ()
+              (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
+              (auto-save-mode)))
+
 (setq org-agenda-files '("~/SparkleShare/mynotes/GTD/"))
 (setq org-src-fontify-natively t)
 (setq org-todo-keywords '((sequence "TODO(t)" "DOING(i)" "|" "DONE(d)" "ABORT(a)")))
@@ -88,6 +151,26 @@
         "* TODO [#A] %?%a \t:fix:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
         :empty-lines 1)
         )))
+
+;; (setq org-agenda-custom-commands
+;;  (quote
+;;         (
+;;         ("0" agenda "Today's Scheduled"
+;;                         ((org-agenda-span 'day)
+;;                         (org-agenda-skip-function '(org-agenda-skip-scheduled-if-not-today))
+;;                         (org-agenda-entry-types '(:scheduled))
+;;                         (org-agenda-overriding-header "Today's Scheduled ")))
+;;         ("1" agenda "Yesterday's Scheduled"
+;;                         ((org-agenda-span 'day)
+;;                         (org-agenda-skip-function '(org-agenda-skip-scheduled-if-not-yesterday))
+;;                         (org-agenda-entry-types '(:scheduled))
+;;                         (org-agenda-overriding-header "Yesterday's Scheduled ")))
+;;         ("2" agenda "LastThreeDay's Scheduled"
+;;                         ((org-agenda-span 'day)
+;;                         (org-agenda-skip-function '(org-agenda-skip-scheduled-if-not-last-three-days))
+;;                         (org-agenda-entry-types '(:scheduled))
+;;                         (org-agenda-overriding-header "LastThreeDay's Scheduled ")))
+;;         ))))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -149,8 +232,18 @@
 (message "" devdocs-site-url)
 (browse-url (format "%s/#q=%s" devdocs-site-url (url-hexify-string query)))))
 
-(setq compile-command "catkin build --this -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES")
+(defun insert-task ()
+  "Insert a new TODO task with [#A] tag and scheduled for today."
+  (interactive)
+  (let ((pos (point)))
+    (insert "** TODO [#A]  :work:\nSCHEDULED: [" (format-time-string "%Y-%m-%d %a %H:%M") "]\n")
+    (goto-char pos)
+    (search-forward "[#A]")
+    (forward-char 1)))
 
+
+
+(setq compile-command "catkin build --this -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES")
 
 ;; (setq consult-preview-key "C-M-SPC")
 
@@ -160,8 +253,18 @@
   (magit-git-command-topdir "git push origin HEAD:refs/for/master"))
   ;; (magit-git-command "push origin HEAD:refs/for/master" (magit-toplevel)))
 (transient-append-suffix 'magit-push "p"
-  '("m" "Push to gerrit" magit-push-to-gerrit)))
+  '("m" "Push to gerrit" magit-push-to-gerrit))
 
+(defun magit-push-to-svn ()
+  (interactive)
+  (magit-git-command-topdir "git svn dcommit"))
+(transient-append-suffix 'magit-push "p"
+  '("D" "Push to svn" magit-push-to-svn))
+(defun magit-pull-from-svn ()
+  (interactive)
+  (magit-git-command-topdir "git svn rebase"))
+(transient-append-suffix 'magit-pull "F"
+  '("R" "Pull from svn" magit-pull-from-svn)))
 
 (defun org-notes-search (&optional arg)
   "Conduct a text search in the current project root.
@@ -198,6 +301,9 @@ If prefix ARG is set, include ignored/hidden files."
 (map! :leader
       :desc "Lookup Mynotes"
       "o s" #'org-notes-search)
+(map! :leader
+      :desc "Insert Task"
+      "n i" #'insert-task)
 
 (use-package! sis
   :config

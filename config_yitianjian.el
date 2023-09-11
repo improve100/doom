@@ -242,6 +242,15 @@
 (message "" devdocs-site-url)
 (browse-url (format "%s/#q=%s" devdocs-site-url (url-hexify-string query)))))
 
+(defun insert-task ()
+  "Insert a new TODO task with [#A] tag and scheduled for today."
+  (interactive)
+  (let ((pos (point)))
+    (insert "** TODO [#A]  :work:\nSCHEDULED: [" (format-time-string "%Y-%m-%d %a %H:%M") "]\n")
+    (goto-char pos)
+    (search-forward "[#A]")
+    (forward-char 1)))
+
 (setq compile-command "catkin build --this -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES")
 
 (add-hook 'org-mode-hook (lambda () (hl-line-mode -1)))
@@ -307,6 +316,10 @@ If prefix ARG is set, include ignored/hidden files."
 (map! :leader
       :desc "Lookup Mynotes"
       "o s" #'org-notes-search2)
+(map! :leader
+      :desc "Insert Task"
+      "n j" #'insert-task)
+
 
 ;; (global-set-key (kbd "C-x C-;") #'comment-line)
 ;; (define-key global-map (kbd "SPC o n") #'mynotes)

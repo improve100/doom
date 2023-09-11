@@ -25,8 +25,9 @@
        ;;helm              ; the *other* search engine for love and life
        ;;ido               ; the other *other* search engine...
        ;;ivy               ; a search engine for love and life
+       vertico
        ;; (vertico +icons)
-       (vertico +childframe)          ; the search engine of the future
+       ;; (vertico +childframe)          ; the search engine of the future
 
        :ui
        ;;deft              ; notational velocity for Emacs
@@ -97,7 +98,7 @@
        ;;gist              ; interacting with github gists
        lookup              ; navigate your code and its documentation
        ;; lsp               ; M-x vscode
-       (lsp +eglot)               ; M-x vscode
+       ;; (lsp +eglot)               ; M-x vscode
        (magit +forge)            ; a git porcelain for Emacs
        ;;make              ; run make tasks from Emacs
        ;;pass              ; password manager for nerds
