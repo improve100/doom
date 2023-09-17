@@ -399,6 +399,11 @@ If prefix ARG is set, include ignored/hidden files."
 ;;   (global-lsp-bridge-mode))
 
 (use-package! mind-wave)
+
+;; (use-package! gptel
+;;  :config
+;;  (setq! gptel-api-key "your key"))
+
 (setq auth-sources '("~/.authinfo"))
 (setq forge-owned-accounts '(("improve100" . (remote-name "improve100"))))
 (map! :leader
