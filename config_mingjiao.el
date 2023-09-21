@@ -236,7 +236,7 @@
   "Insert a new TODO task with [#A] tag and scheduled for today."
   (interactive)
   (let ((pos (point)))
-    (insert "** TODO [#A]  :work:\nSCHEDULED: [" (format-time-string "%Y-%m-%d %a %H:%M") "]\n")
+    (insert "** TODO [#A]  :work:\nSCHEDULED: <" (format-time-string "%Y-%m-%d %a %H:%M") ">\n")
     (goto-char pos)
     (search-forward "[#A]")
     (forward-char 1)))
