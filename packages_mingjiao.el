@@ -8,9 +8,10 @@
 
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
 ;(package! some-package)
-(package! posframe)
-(package! youdao-dictionary)
 (package! sis)
+(package! youdao-dictionary)
+(package! posframe)
+;; (package! markdown-mode)
 (package! mind-wave
  :recipe (:host github :repo "manateelazycat/mind-wave" :files ("*.*")))
 ;; (package! sis :recipe (:host github :repo "laishulu/emacs-smart-input-source"))
@@ -57,3 +58,9 @@
 ; add to .doom.d/packages.el
 (package! closql :pin "0a7226331ff1f96142199915c0ac7940bac4afdd")
 (package! eglot :pin "419a8cb11a6f25c706e37b8eb7e16d1d3cb1c91d")
+(package! gptel)
+(package! org-crypt :disable t)
+;; (package! liberime
+  ;; :recipe (:host github :repo "DogLooksGood/liberime" :files ("CMakeLists.txt" "Makefile" "src" "*.el")))
+;; (package! rime
+;;   :recipe (:host github :repo "DogLooksGood/emacs-rime" :files ("rime.el")))

@@ -301,18 +301,20 @@ If prefix ARG is set, include ignored/hidden files."
 (map! :leader
       :desc "Lookup Mynotes"
       "o s" #'org-notes-search)
-(map! :leader
-      :desc "Insert Task"
-      "n i" #'insert-task)
+;; (map! :leader
+;;       :desc "Insert Task"
+;;       "n i" #'insert-task)
 
 (use-package! sis
+  :after (evil)
   :config
   (sis-ism-lazyman-config "1" "2" 'fcitx)
-   ;; (delete "C-h" sis-prefix-override-keys)
   (sis-global-respect-mode t)
   (sis-global-inline-mode t)
   (sis-global-context-mode t)
-  (sis-global-cursor-color-mode t))
+  ;; (sis-global-cursor-color-mode t)
+  )
+
 ;; (global-set-key (kbd "C-x C-;") #'comment-line)
 ;; (define-key global-map (kbd "SPC o n") #'mynotes)
 ;; (use-package sis
@@ -366,8 +368,8 @@ If prefix ARG is set, include ignored/hidden files."
 ;;         (nreverse faces)
 ;;       (car faces))))
 
-(setq python-shell-interpreter "~/.pyenv/versions/3.8.5/bin/python3.8")
-(setq mind-wave-python-command "~/.pyenv/versions/3.8.5/bin/python3.8")
+;; (setq python-shell-interpreter "~/.pyenv/versions/3.8.5/bin/python3.8")
+;; (setq mind-wave-python-command "~/.pyenv/versions/3.8.5/bin/python3.8")
 (use-package! mind-wave)
 (setq auth-sources '("~/.authinfo"))
 (setq forge-owned-accounts '(("improve100" . (remote-name "improve100"))))
@@ -392,5 +394,13 @@ If prefix ARG is set, include ignored/hidden files."
 (map! :leader
       :desc "Mind Wave Generate Code"
       "o m c" #'mind-wave-generate-code)
-
+(map! :leader
+      :desc "Gptel Send Generate"
+      "o m g" #'gptel-send)
 (setq flycheck-shellcheck-follow-sources nil)
+
+;; (use-package! rime
+;;   :custom
+;;   ;; (rime-inline-ascii-trigger 'shift-r)
+;;   (default-input-method "rime")
+;;   (rime-show-candidate 'posframe))

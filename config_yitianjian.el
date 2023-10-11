@@ -318,7 +318,7 @@ If prefix ARG is set, include ignored/hidden files."
       "o s" #'org-notes-search2)
 (map! :leader
       :desc "Insert Task"
-      "n j" #'insert-task)
+      "n i" #'insert-task)
 
 
 ;; (global-set-key (kbd "C-x C-;") #'comment-line)
