@@ -42,115 +42,116 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (after! org
-(setq org-directory "~/SparkleShare/mynotes/")
+  (add-hook 'org-mode-hook 'org-fragtog-mode)
+  (setq org-directory "~/SparkleShare/mynotes/")
 
-;; (defun org-agenda-skip-scheduled-if-not-today ()
-;; "If this function returns nil, the current match should not be skipped.
-;; Otherwise, the function must return a position from where the search
-;; should be continued."
-;;  (ignore-errors
-;;   (let ((subtree-end (save-excursion (org-end-of-subtree t)))
-;;         (scheduled-day
-;;         (time-to-days
-;;         (org-time-string-to-time
-;;         (org-entry-get nil "SCHEDULED"))))
-;;         (now (time-to-days (current-time))))
-;;    (and scheduled-day
-;;         (not (= scheduled-day now))
-;;         subtree-end))))
+  ;; (defun org-agenda-skip-scheduled-if-not-today ()
+  ;; "If this function returns nil, the current match should not be skipped.
+  ;; Otherwise, the function must return a position from where the search
+  ;; should be continued."
+  ;;  (ignore-errors
+  ;;   (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+  ;;         (scheduled-day
+  ;;         (time-to-days
+  ;;         (org-time-string-to-time
+  ;;         (org-entry-get nil "SCHEDULED"))))
+  ;;         (now (time-to-days (current-time))))
+  ;;    (and scheduled-day
+  ;;         (not (= scheduled-day now))
+  ;;         subtree-end))))
 
-;; (defun org-agenda-skip-scheduled-if-not-yesterday ()
-;; "If this function returns nil, the current match should not be skipped.
-;; Otherwise, the function must return a position from where the search
-;; should be continued."
-;;  (ignore-errors
-;;   (let ((subtree-end (save-excursion (org-end-of-subtree t)))
-;;         (scheduled-day
-;;         (time-to-days
-;;         (org-time-string-to-time
-;;         (org-entry-get nil "SCHEDULED"))))
-;;         (yesterday (- (time-to-days (current-time)) 1)))
-;;    (and scheduled-day
-;;         (not (= scheduled-day yesterday))
-;;         subtree-end))))
+  ;; (defun org-agenda-skip-scheduled-if-not-yesterday ()
+  ;; "If this function returns nil, the current match should not be skipped.
+  ;; Otherwise, the function must return a position from where the search
+  ;; should be continued."
+  ;;  (ignore-errors
+  ;;   (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+  ;;         (scheduled-day
+  ;;         (time-to-days
+  ;;         (org-time-string-to-time
+  ;;         (org-entry-get nil "SCHEDULED"))))
+  ;;         (yesterday (- (time-to-days (current-time)) 1)))
+  ;;    (and scheduled-day
+  ;;         (not (= scheduled-day yesterday))
+  ;;         subtree-end))))
 
-;; (defun org-agenda-skip-scheduled-if-not-last-three-days ()
-;; "If this function returns nil, the current match should not be skipped.
-;; Otherwise, the function must return a position from where the search
-;; should be continued."
-;;  (ignore-errors
-;;   (let ((subtree-end (save-excursion (org-end-of-subtree t)))
-;;         (scheduled-day
-;;         (time-to-days
-;;         (org-time-string-to-time
-;;         (org-entry-get nil "SCHEDULED"))))
-;;         (the-day-before-yesterday (- (time-to-days (current-time)) 5)))
-;;    (and scheduled-day
-;;         (not (> scheduled-day the-day-before-yesterday))
-;;         subtree-end))))
+  ;; (defun org-agenda-skip-scheduled-if-not-last-three-days ()
+  ;; "If this function returns nil, the current match should not be skipped.
+  ;; Otherwise, the function must return a position from where the search
+  ;; should be continued."
+  ;;  (ignore-errors
+  ;;   (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+  ;;         (scheduled-day
+  ;;         (time-to-days
+  ;;         (org-time-string-to-time
+  ;;         (org-entry-get nil "SCHEDULED"))))
+  ;;         (the-day-before-yesterday (- (time-to-days (current-time)) 5)))
+  ;;    (and scheduled-day
+  ;;         (not (> scheduled-day the-day-before-yesterday))
+  ;;         subtree-end))))
 
-;; (setq org-noter-notes-search-path '("~/SparkleShare/mynotes"))
-;; (setq org-agenda-files (list (concat org-directory "task.org")))
-(defun my/org-agenda-prefix-format (prefix)
-  (let ((scheduled (org-entry-get nil "SCHEDULED"))
-        (closed (org-entry-get nil "CLOSED")))
-    (or (and scheduled closed (concat prefix "Scheduled: " scheduled " Closed: " closed))
-        (and scheduled (concat prefix "Scheduled: " scheduled))
-        (and closed (concat prefix "Closed: " closed))
-        prefix)))
-(setq org-agenda-prefix-format '((agenda . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
-                                (todo . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
-                                (tags . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
-                                (search . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")))
+  ;; (setq org-noter-notes-search-path '("~/SparkleShare/mynotes"))
+  ;; (setq org-agenda-files (list (concat org-directory "task.org")))
+  (defun my/org-agenda-prefix-format (prefix)
+    (let ((scheduled (org-entry-get nil "SCHEDULED"))
+          (closed (org-entry-get nil "CLOSED")))
+      (or (and scheduled closed (concat prefix "Scheduled: " scheduled " Closed: " closed))
+          (and scheduled (concat prefix "Scheduled: " scheduled))
+          (and closed (concat prefix "Closed: " closed))
+          prefix)))
+  (setq org-agenda-prefix-format '((agenda . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
+                                   (todo . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
+                                   (tags . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")
+                                   (search . " %i %-12:c%(my/org-agenda-prefix-format \"\") ")))
 
-(add-hook 'org-agenda-mode-hook
-        (lambda ()
+  (add-hook 'org-agenda-mode-hook
+            (lambda ()
               (add-hook 'auto-save-hook 'org-save-all-org-buffers nil t)
               (auto-save-mode)))
 
-(setq org-agenda-files '("~/SparkleShare/mynotes/GTD/"))
-(setq org-src-fontify-natively t)
-(setq org-todo-keywords '((sequence "TODO(t)" "DOING(i)" "|" "DONE(d)" "ABORT(a)")))
-(setq org-bullets-bullet-list '("🚀" "🚄" "🚉" "⛵" "🚌" "🚔" "🚲"))
-(setq org-default-notes-file (expand-file-name "GTD/task.org" org-directory))
-(setq org-capture-templates
+  (setq org-agenda-files '("~/SparkleShare/mynotes/GTD/"))
+  (setq org-src-fontify-natively t)
+  (setq org-todo-keywords '((sequence "TODO(t)" "DOING(i)" "|" "DONE(d)" "ABORT(a)")))
+  (setq org-bullets-bullet-list '("🚀" "🚄" "🚉" "⛵" "🚌" "🚔" "🚲"))
+  (setq org-default-notes-file (expand-file-name "GTD/task.org" org-directory))
+  (setq org-capture-templates
         '(("w" "work" entry (file+headline "GTD/task.org" "工作安排")
-        "* TODO [#A] %? \t:work:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
-        :empty-lines 1)
-        ("W" "work by link" entry (file+headline "GTD/task.org" "工作安排")
-        "* TODO [#A] %?%a \t:work:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
-        :empty-lines 1)
-        ("t" "tools" entry (file+headline "GTD/task.org" "tools")
-        "* TODO [#B] %? \t:tools:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
-        :empty-lines 1)
-        ("T" "tools by link" entry (file+headline "GTD/task.org" "tools")
-        "* TODO [#A] %?%a \t:tools:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
-        :empty-lines 1)
-        ("l" "learning" entry (file+headline "GTD/task.org" "learning")
-        "* TODO [#B] %? \t:learning:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
-        :empty-lines 1)
-        ("L" "learning by link" entry (file+headline "GTD/task.org" "learning")
-        "* TODO [#A] %?%a \t:learning:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
-        :empty-lines 1)
-        ("z" "threemen" entry (file+headline "GTD/task.org" "threemen")
-        "* TODO [#B] %? \t:threemen:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
-        :empty-lines 1)
-        ("Z" "threemen by link" entry (file+headline "GTD/task.org" "threemen")
-        "* TODO [#A] %?%a \t:threemen:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
-        :empty-lines 1)
-        ("o" "others" entry (file+headline "GTD/task.org" "others")
-        "* TODO [#C] %? \t:other:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
-        :empty-lines 1)
-        ("O" "others by link" entry (file+headline "GTD/task.org" "others")
-        "* TODO [#A] %?%a \t:others:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
-        :empty-lines 1)
-        ("e" "email" entry (file+headline "GTD/task.org" "email")
-        "* TODO [#A] %?%a \t:email:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
-        :empty-lines 1)
-        ("f" "fix" entry (file+headline "GTD/task.org" "fix")
-        "* TODO [#A] %?%a \t:fix:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
-        :empty-lines 1)
-        )))
+           "* TODO [#A] %? \t:work:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+           :empty-lines 1)
+          ("W" "work by link" entry (file+headline "GTD/task.org" "工作安排")
+           "* TODO [#A] %?%a \t:work:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
+           :empty-lines 1)
+          ("t" "tools" entry (file+headline "GTD/task.org" "tools")
+           "* TODO [#B] %? \t:tools:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+           :empty-lines 1)
+          ("T" "tools by link" entry (file+headline "GTD/task.org" "tools")
+           "* TODO [#A] %?%a \t:tools:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
+           :empty-lines 1)
+          ("l" "learning" entry (file+headline "GTD/task.org" "learning")
+           "* TODO [#B] %? \t:learning:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+           :empty-lines 1)
+          ("L" "learning by link" entry (file+headline "GTD/task.org" "learning")
+           "* TODO [#A] %?%a \t:learning:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
+           :empty-lines 1)
+          ("z" "threemen" entry (file+headline "GTD/task.org" "threemen")
+           "* TODO [#B] %? \t:threemen:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+           :empty-lines 1)
+          ("Z" "threemen by link" entry (file+headline "GTD/task.org" "threemen")
+           "* TODO [#A] %?%a \t:threemen:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
+           :empty-lines 1)
+          ("o" "others" entry (file+headline "GTD/task.org" "others")
+           "* TODO [#C] %? \t:other:\nSCHEDULED: <%<%Y-%m-%d %a>> \n"
+           :empty-lines 1)
+          ("O" "others by link" entry (file+headline "GTD/task.org" "others")
+           "* TODO [#A] %?%a \t:others:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
+           :empty-lines 1)
+          ("e" "email" entry (file+headline "GTD/task.org" "email")
+           "* TODO [#A] %?%a \t:email:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
+           :empty-lines 1)
+          ("f" "fix" entry (file+headline "GTD/task.org" "fix")
+           "* TODO [#A] %?%a \t:fix:\nSCHEDULED: %(org-insert-time-stamp (org-read-date nil t \"+0d\")) \n"
+           :empty-lines 1)
+          )))
 
 ;; (setq org-agenda-custom-commands
 ;;  (quote
@@ -205,6 +206,7 @@
 ;; they are implemented.
 ;; (setq ansi-color-for-compilation-mode 'filter)
 
+(setq evil-kill-on-visual-paste nil)
 (+global-word-wrap-mode +1)
 ;; set fullscren maximized
 (add-to-list 'initial-frame-alist '(fullscreen . maximized))
@@ -215,22 +217,22 @@
 (add-to-list 'auto-mode-alist '("\\.ino\\'" . c++-mode))
 
 (if (string= (system-name) "mingjiao")
-  (setq fancy-splash-image '"~/Pictures/logo.png")
-(setq fancy-splash-image '"~/Pictures/dolphin.png"))
+    (setq fancy-splash-image '"~/Pictures/logo.png")
+  (setq fancy-splash-image '"~/Pictures/dolphin.png"))
 ;; custommize function
 (defun mynotes ()
-    (interactive)
-(dired "~/SparkleShare/mynotes"))
+  (interactive)
+  (dired "~/SparkleShare/mynotes"))
 
 (defun devdocs-search ()
-"Search for QUERY in the DevDocs website."
-(interactive)
-(let ((devdocs-site-url "https://devdocs.io")
+  "Search for QUERY in the DevDocs website."
+  (interactive)
+  (let ((devdocs-site-url "https://devdocs.io")
         (query (if (use-region-p)
-                (buffer-substring (region-beginning) (region-end))
-                (thing-at-point 'symbol))))
-(message "" devdocs-site-url)
-(browse-url (format "%s/#q=%s" devdocs-site-url (url-hexify-string query)))))
+                   (buffer-substring (region-beginning) (region-end))
+                 (thing-at-point 'symbol))))
+    (message "" devdocs-site-url)
+    (browse-url (format "%s/#q=%s" devdocs-site-url (url-hexify-string query)))))
 
 (defun insert-task ()
   "Insert a new TODO task with [#A] tag and scheduled for today."
@@ -243,28 +245,28 @@
 
 
 
-(setq compile-command "catkin build --this -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES")
+(setq compile-command "catkin build -j10 --this -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES")
 
 ;; (setq consult-preview-key "C-M-SPC")
 
 (after! magit
-(defun magit-push-to-gerrit ()
-  (interactive)
-  (magit-git-command-topdir "git push origin HEAD:refs/for/master"))
+  (defun magit-push-to-gerrit ()
+    (interactive)
+    (magit-git-command-topdir "git push origin HEAD:refs/for/master"))
   ;; (magit-git-command "push origin HEAD:refs/for/master" (magit-toplevel)))
-(transient-append-suffix 'magit-push "p"
-  '("m" "Push to gerrit" magit-push-to-gerrit))
+  (transient-append-suffix 'magit-push "p"
+    '("m" "Push to gerrit" magit-push-to-gerrit))
 
-(defun magit-push-to-svn ()
-  (interactive)
-  (magit-git-command-topdir "git svn dcommit"))
-(transient-append-suffix 'magit-push "p"
-  '("D" "Push to svn" magit-push-to-svn))
-(defun magit-pull-from-svn ()
-  (interactive)
-  (magit-git-command-topdir "git svn rebase"))
-(transient-append-suffix 'magit-pull "F"
-  '("R" "Pull from svn" magit-pull-from-svn)))
+  (defun magit-push-to-svn ()
+    (interactive)
+    (magit-git-command-topdir "git svn dcommit"))
+  (transient-append-suffix 'magit-push "p"
+    '("D" "Push to svn" magit-push-to-svn))
+  (defun magit-pull-from-svn ()
+    (interactive)
+    (magit-git-command-topdir "git svn rebase"))
+  (transient-append-suffix 'magit-pull "F"
+    '("R" "Pull from svn" magit-pull-from-svn)))
 
 (defun org-notes-search (&optional arg)
   "Conduct a text search in the current project root.
@@ -286,6 +288,7 @@ If prefix ARG is set, include ignored/hidden files."
 (after! compile
   ;; The ANSI color hook leads to errors when compiling Haskell code.
   (remove-hook 'compilation-filter-hook #'ansi-color-compilation-filter))
+
 ;; (map! :leader
 ;;     (:prefix ("o" . "open in browser")
 ;;       :desc "Open mynotes"  "n"  #'mynotes))
@@ -304,6 +307,7 @@ If prefix ARG is set, include ignored/hidden files."
 ;; (map! :leader
 ;;       :desc "Insert Task"
 ;;       "n i" #'insert-task)
+(map! :n "C-w a" #'ace-window)
 
 (use-package! sis
   :after (evil)
