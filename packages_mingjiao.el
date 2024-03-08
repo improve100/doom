@@ -15,6 +15,7 @@
 ;; (package! markdown-mode)
 (package! mind-wave
   :recipe (:host github :repo "manateelazycat/mind-wave" :files ("*.*")))
+(package! blamer :recipe (:host github :repo "artawower/blamer.el"))
 ;; (package! sis :recipe (:host github :repo "laishulu/emacs-smart-input-source"))
 ;; To install a package directly from a remote git repo, you must specify a
 ;; `:recipe'. You'll find documentation on what `:recipe' accepts here:

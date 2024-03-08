@@ -403,6 +403,19 @@ If prefix ARG is set, include ignored/hidden files."
       "o m g" #'gptel-send)
 (setq flycheck-shellcheck-follow-sources nil)
 
+(use-package blamer
+  :bind (("s-i" . blamer-show-commit-info))
+  :defer 20
+  :custom
+  (blamer-idle-time 0.3)
+  (blamer-min-offset 10)
+  :custom-face
+  (blamer-face ((t :foreground "#7a88cf"
+                   :background nil
+                   :height 100
+                   :italic t)))
+  :config
+  (global-blamer-mode 1))
 ;; (use-package! rime
 ;;   :custom
 ;;   ;; (rime-inline-ascii-trigger 'shift-r)
