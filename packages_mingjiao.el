@@ -9,7 +9,7 @@
 ;; To install SOME-PACKAGE from MELPA, ELPA or emacsmirror:
                                         ;(package! some-package)
 (package! sis)
-(package! youdao-dictionary)
+;; (package! youdao-dictionary)
 (package! posframe)
 (package! org-fragtog)
 ;; (package! markdown-mode)
@@ -59,7 +59,8 @@
 
                                         ; add to .doom.d/packages.el
 (package! closql :pin "0a7226331ff1f96142199915c0ac7940bac4afdd")
-(package! eglot :pin "419a8cb11a6f25c706e37b8eb7e16d1d3cb1c91d")
+(package! doom-modeline :pin "cfc7bcf1494cb0634a1464dc40a4a1a1e337cb37")
+(package! eglot :pin "d14fa2e5c537d48a25ce8444fdf9474ff2a8f7c0")
 (package! gptel)
 (package! org-crypt :disable t)
 ;; (package! liberime

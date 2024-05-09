@@ -38,6 +38,7 @@
 ;; This determines the style of line numbers in effect. If set to `nil', line
 ;; numbers are disabled. For relative line numbers, set this to `relative'.
 (setq display-line-numbers-type t)
+(add-hook 'cuda-mode-hook 'display-line-numbers-mode)
 
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
@@ -209,7 +210,10 @@
 (setq evil-kill-on-visual-paste nil)
 (+global-word-wrap-mode +1)
 ;; set fullscren maximized
-(add-to-list 'initial-frame-alist '(fullscreen . maximized))
+(add-to-list 'default-frame-alist '(fullscreen . maximized))
+;; (add-to-list 'initial-frame-alist '(fullscreen . maximized))
+;; (add-hook 'window-setup-hook #'toggle-frame-maximized)
+;; (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
 (setq create-lockfiles nil)
 ;; (add-hook 'window-setup-hook #'toggle-frame-maximized)
 ;; (add-hook 'window-setup-hook #'toggle-frame-fullscreen)
@@ -247,6 +251,7 @@
 
 (setq compile-command "catkin build -j10 --this -DCMAKE_BUILD_TYPE=Release -DCMAKE_EXPORT_COMPILE_COMMANDS=YES")
 
+(remove-hook 'kill-buffer-hook 'centaur-tabs-buffer-track-killed)
 ;; (setq consult-preview-key "C-M-SPC")
 
 (after! magit
@@ -415,9 +420,25 @@ If prefix ARG is set, include ignored/hidden files."
                    :height 100
                    :italic t)))
   :config
-  (global-blamer-mode 1))
+  (global-blamer-mode 0))
 ;; (use-package! rime
 ;;   :custom
 ;;   ;; (rime-inline-ascii-trigger 'shift-r)
 ;;   (default-input-method "rime")
 ;;   (rime-show-candidate 'posframe))
+(use-package! gptel
+  :bind (("C-c C-<return>" . gptel-send))
+  :config
+  ;; (setq! gptel-api-key "your key")
+  ;; Groq offers an OpenAI compatible API
+  (gptel-make-openai "Moonshot"
+    :host "api.moonshot.cn"
+    :endpoint "/v1/chat/completions"
+    :key "sk-RHBBAsYYBOuoGjbWbzrQCjgDHT2OyoVy8oEYJ71V1Ee8Jg0K"
+    :models '("moonshot-v1-8k" "moonshot-v1-32k" "moonshot-v1-128k"))
+  (gptel-make-openai "Groq"               ;Any name you want
+    :host "api.groq.com"
+    :endpoint "/openai/v1/chat/completions"
+    :stream t
+    :key "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"                   ;can be a function that returns the key
+    :models '("mixtral-8x7b-32768" "gemma-7b-it" "llama2-70b-4096")))
